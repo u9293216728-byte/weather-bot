@@ -27,8 +27,6 @@ def start_message(message):
     bot.send_message(chat_id, "Choose a city:", reply_markup=keyboard)
 
 # Function to fetch weather from OpenWeatherMap
-#   Calls requests.get to retrieve JSON data and extracts main fields
-#   Returns a formatted string with description, temperature, feels-like, and humidity
 def get_weather(city_name):
     # Input validation: if the city_name is not in CITIES, return a clear message
     if city_name not in CITIES:
@@ -77,18 +75,16 @@ def get_weather(city_name):
 def callback_all(call):
     return True
 
-# Callback query handler: called when the user clicks a city button.
-# - Reads the city name from call.data (callback_data)
-# - Calls get_weather to fetch weather text
-# - Rebuilds the keyboard so the user can pick another city
-# - Edits the original message to show the weather and the keyboard again
+
+# Edits the original message to show the weather and the keyboard again
 @bot.callback_query_handler(func=callback_all)
 def handle_city_choice(call):
+    # Reads the city name from call.data (callback_data)
     city_name = call.data
-    # Fetch weather synchronously (this will block this thread briefly)
+    # Calls get_weather to fetch weather text
     weather_text = get_weather(city_name)
 
-    # Rebuild the inline keyboard so the user can choose another cityp
+    # Rebuild the inline keyboard so the user can choose another city
     keyboard = types.InlineKeyboardMarkup()
     for city in CITIES:
         button = types.InlineKeyboardButton(city, callback_data=city)
@@ -98,12 +94,7 @@ def handle_city_choice(call):
     new_text = "Weather in " + city_name + ":\n" + weather_text + "\n\nChoose another city:"
 
     # Edit the existing message (replace text and attach the keyboard)
-    bot.edit_message_text(
-        chat_id=call.message.chat.id,
-        message_id=call.message.message_id,
-        text=new_text,
-        reply_markup=keyboard
-    )
+    bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,text=new_text,reply_markup=keyboard)
 
 # infinity_polling() runs forever 
 bot.infinity_polling()
