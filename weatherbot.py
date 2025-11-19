@@ -1,7 +1,7 @@
 import requests
 import telebot
 from telebot import types
-
+# asigning API keys
 OWM_API_KEY = "6f6c7160b5e6b7016b200cf7ba25fa10"
 BOT_TOKEN = "8384257308:AAEmN76X7cUGdSrfAsd0hEubX2l6xEoYqjw"
 
@@ -62,7 +62,7 @@ def get_weather(city_name):
         text = text + "Feels like: " + str(feels_like) + "°C\n"
         text = text + "Humidity: " + str(humidity) + "%"
         
-        # - Returns a formatted string with description, temperature, feels-like, and humidity
+        # Returns a string with description, temperature, feels-like, and humidity
         return text
     except requests.RequestException:
         # Network or HTTP-related error (timeout, connection error, non-2xx status)
